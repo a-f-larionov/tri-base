@@ -9,7 +9,7 @@ services:
     volumes:
       - ./other/nginx/local/conf.d:/etc/nginx/conf.d
       - /etc/letsencrypt:/var/keys/letsencrypt
-      - ./keys/self-signed:/var/keys/self-signed/
+      - ./nginx/keys/self-signed:/var/keys/self-signed/
       - ./public:/var/www/tri-base/public
     networks:
       tri-base-net:
