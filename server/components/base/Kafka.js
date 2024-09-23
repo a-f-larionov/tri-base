@@ -1,3 +1,5 @@
+const { Logs } = require("./Logs");
+
 const KafkaJS = require("kafkajs").Kafka;
 //const { LogicConnection } = require("../application/logic/LogicConnection.js");
 
@@ -10,12 +12,12 @@ const kafkaJs = new KafkaJS({
     ],
     retry: {
         initialRetryTime: 1000,
-        retries: 888
+        retries: 10000
     }
 });
 
 const producer = kafkaJs.producer()
-const consumer = kafkaJs.consumer({groupId: '1'})
+const consumer = kafkaJs.consumer({ groupId: '1' })
 
 const run = async () => {
     // Producing
@@ -23,10 +25,10 @@ const run = async () => {
 
     // Consuming
     await consumer.connect()
-    await consumer.subscribe({topic: 'topic-client', fromBeginning: true})
+    await consumer.subscribe({ topic: 'topic-client', fromBeginning: true })
 
     await consumer.run({
-        eachMessage: async ({topic, partition, message}) => {
+        eachMessage: async ({ topic, partition, message }) => {
             let msg = JSON.parse(message.value.toString());
 
             console.log("KAFKA." + topic + " > node" + " " + partition);
@@ -133,7 +135,12 @@ const run = async () => {
 }
 
 
-run().catch(console.error);
+run().catch((e) => {
+
+    Logs.log(JSON.stringify(e), Logs.LEVEL_ERROR, true);
+
+    console.error(e);
+});
 
 /**
  * @type {Kafka}
@@ -223,4 +230,4 @@ var Kafka = function () {
 Kafka = new Kafka();
 Kafka.depends = ['Logs'];
 global['Kafka'] = Kafka;
-module.exports = {Kafka: Kafka}
+module.exports = { Kafka: Kafka }
