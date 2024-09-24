@@ -229,6 +229,6 @@ var Kafka = function () {
 
 Kafka = new Kafka();
 Kafka.depends = ['Logs'];
-Logs.setK
+Logs.setKafka(Kafka);
 global['Kafka'] = Kafka;
 module.exports = { Kafka: Kafka }

@@ -135,7 +135,7 @@ var Logs = function () {
 
     this.Kafka = undefined;
     this.setKafka = function (toInject) {
-        this.kafka = toInject;
+        this.Kafka = toInject;
     }
 };
 
