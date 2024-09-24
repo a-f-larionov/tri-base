@@ -112,7 +112,7 @@ var Logs = function () {
      */
     let telegramSent = function (message) {
         if (message.includes("KafkaJS")) {
-            //    return;
+            return;
         }
         if (!this.Kafka) {
             console.log("Cant sent to telegram " + message);
