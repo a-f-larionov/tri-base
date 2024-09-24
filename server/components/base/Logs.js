@@ -1,5 +1,4 @@
 const FS = require('fs');
-const {Kafka} = require("./Kafka");
 
 /**
  * Компонент логирования.
@@ -113,13 +112,17 @@ var Logs = function () {
      */
     let telegramSent = function (message) {
         if (message.includes("KafkaJS")) {
-        //    return;
+            //    return;
         }
-        Kafka.sendToCommon({
+        if (!this.Kafka) {
+            console.log("Cant sent to telegram " + message);
+            return;
+        }
+        this.Kafka.sendToCommon({
             message: message,
             level: "INFO",
             sendToTelegram: true
-        }, undefined, Kafka.TYPE_LOG_RQ_DTO);
+        }, undefined, this.Kafka.TYPE_LOG_RQ_DTO);
     };
 
     let typeTitles = {};
@@ -129,10 +132,15 @@ var Logs = function () {
     typeTitles[this.LEVEL_INFO] = '!';
     typeTitles[this.LEVEL_WARN] = 'w';
     typeTitles[this.LEVEL_ERROR] = 'E';
+
+    this.Kafka = undefined;
+    this.setKafka = function (toInject) {
+        this.kafka = toInject;
+    }
 };
 
 Logs = new Logs();
 
 Logs.depends = [];
 global['Logs'] = Logs
-module.exports = {Logs}
+module.exports = { Logs }
